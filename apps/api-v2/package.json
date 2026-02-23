@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "nx": {
+    "projectType": "application",
     "targets": {
       "build": {
         "executor": "nx:run-commands",
@@ -63,6 +64,7 @@
           "build"
         ],
         "options": {
+          "port": 3333,
           "buildTarget": "@org/api-v2:build",
           "runBuildTargetDependencies": false
         },
@@ -74,16 +76,31 @@
             "buildTarget": "@org/api-v2:build:production"
           }
         }
+      },
+      "docker:build": {
+        "dependsOn": [
+          "build",
+          "prune"
+        ]
       }
-    }
+    },
+    "tags": [
+      "scope:api-v2"
+    ]
   },
   "dependencies": {
+    "@anatine/zod-nestjs": "^2.0.12",
     "@nestjs/common": "^11.0.0",
     "@nestjs/core": "^11.0.0",
     "@nestjs/platform-express": "^11.0.0",
+    "@org/api-products": "workspace:*",
+    "@org/models": "workspace:*",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.3",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "zod": "^3.20.0"
   },
   "devDependencies": {
     "@nestjs/testing": "^11.0.0"

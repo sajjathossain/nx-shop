@@ -19,7 +19,7 @@ module.exports = {
       optimization: false,
       outputHashing: 'none',
       generatePackageJson: false,
-      sourceMap: true,
+      sourceMap: false,
     }),
   ],
 };
