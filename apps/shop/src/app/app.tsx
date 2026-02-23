@@ -1,5 +1,5 @@
-import { lazy, Suspense } from 'react';
-import { Route, Routes, Navigate } from 'react-router-dom';
+import { createElement, lazy, Suspense } from 'react';
+import { Route, Routes, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { LoadingSpinner } from '@org/shop-shared-ui';
 import './app.css';
 
@@ -8,6 +8,9 @@ const ProductList = lazy(() => import('@org/shop-feature-products').then(m => ({
 const ProductDetail = lazy(() => import('@org/shop-feature-product-detail').then(m => ({ default: m.ProductDetail })));
 
 export function App() {
+  const navigate = useNavigate();
+  const { id } = useParams();
+
   return (
     <div className="app">
       <header className="app-header">
@@ -20,8 +23,12 @@ export function App() {
         <Suspense fallback={<LoadingSpinner />}>
           <Routes>
             <Route path="/" element={<Navigate to="/products" replace />} />
-            <Route path="/products" element={<ProductList />} />
-            <Route path="/products/:id" element={<ProductDetail />} />
+            <Route path="/products" element={<ProductList navigate={(id) => navigate(`/products/${id}`)} />} />
+            <Route path="/products/:id" element={createElement(() => {
+              if (!id) return <Navigate to="/products" replace />
+
+              return <ProductDetail id={id} navigate={(route) => navigate(route)} />
+            })} />
             <Route path="*" element={<Navigate to="/products" replace />} />
           </Routes>
         </Suspense>
