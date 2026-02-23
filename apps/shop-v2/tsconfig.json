@@ -44,5 +44,22 @@
     "eslint.config.js",
     "eslint.config.cjs",
     "eslint.config.mjs"
+  ],
+  "references": [
+    {
+      "path": "../../libs/shop/shared-ui"
+    },
+    {
+      "path": "../../libs/shop/feature-products"
+    },
+    {
+      "path": "../../libs/shop/feature-product-detail"
+    },
+    {
+      "path": "../../libs/shop/data"
+    },
+    {
+      "path": "../../libs/shared/models"
+    }
   ]
 }

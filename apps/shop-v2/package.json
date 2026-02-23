@@ -5,6 +5,47 @@
   "dependencies": {
     "next": "~16.0.1",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "@org/models": "workspace:*",
+    "@org/shop-data": "workspace:*",
+    "@org/shop-feature-product-detail": "workspace:*",
+    "@org/shop-feature-products": "workspace:*",
+    "@org/shop-shared-ui": "workspace:*"
+  },
+  "nx": {
+    "projectType": "application",
+    "tags": [
+      "scope:shop-v2"
+    ],
+    "targets": {
+      "serve": {
+        "executor": "@nx/next:server",
+        "dependsOn": [
+          "@org/api-v2:serve"
+        ],
+        "options": {
+          "buildTarget": "@org/shop-v2:build",
+          "port": 3000,
+          "dev": true
+        }
+      },
+      "build": {
+        "executor": "@nx/next:build",
+        "options": {
+          "outputPath": "dist/apps/shop-v2"
+        }
+      },
+      "dev": {
+        "dependsOn": [
+          "@org/api-v2:serve"
+        ]
+      },
+      "preview": {
+        "dependsOn": [
+          "build",
+          "@org/api-v2:serve"
+        ]
+      }
+    }
   }
 }

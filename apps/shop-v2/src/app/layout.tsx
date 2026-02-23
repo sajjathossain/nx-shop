@@ -1,4 +1,4 @@
-import './global.css';
+import './page.css';
 
 export const metadata = {
   title: 'Welcome to shop-v2',
@@ -12,7 +12,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <div className="app">
+          <header className="app-header">
+            <div className="header-content">
+              <h1 className="app-title">Nx Shop Demo</h1>
+            </div>
+          </header>
+
+          <main className="app-main">
+            {children}
+          </main>
+        </div>
+      </body>
     </html>
   );
 }
