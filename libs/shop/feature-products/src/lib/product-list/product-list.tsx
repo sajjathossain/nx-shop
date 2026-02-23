@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, FC } from 'react';
+// import { useNavigate } from 'react-router-dom';
 import { Product, ProductFilter } from '@org/models';
 import { useProducts, useCategories } from '@org/shop-data';
 import {
@@ -9,8 +9,13 @@ import {
 } from '@org/shop-shared-ui';
 import styles from './product-list.module.css';
 
-export function ProductList() {
-  const navigate = useNavigate();
+type TProps = {
+  navigate: (id: string) => void;
+}
+
+export const ProductList: FC<TProps> = (props) => {
+  const { navigate } = props;
+  // const navigate = useNavigate();
 
   // Filter state
   const [searchTerm, setSearchTerm] = useState('');
@@ -46,7 +51,8 @@ export function ProductList() {
   }, [searchTerm, selectedCategory, inStockOnly]);
 
   const handleProductSelect = (product: Product) => {
-    navigate(`/products/${product.id}`);
+    // navigate(`/products/${product.id}`);
+    navigate(product.id);
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
