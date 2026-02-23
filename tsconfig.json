@@ -38,6 +38,9 @@
     },
     {
       "path": "./apps/api-v2"
+    },
+    {
+      "path": "./apps/shop-v2"
     }
   ]
 }
