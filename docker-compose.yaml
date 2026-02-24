@@ -1,0 +1,44 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    container_name: db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: nx-shop
+    ports:
+      - "5432:5432"
+
+  api-v2:
+    build:
+      dockerfile: Dockerfile-api-v2
+      # target: development
+      context: .
+    container_name: api-v2
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+    environment:
+      NODE_ENV: production
+    restart: unless-stopped
+
+  shop-v2:
+    build:
+      dockerfile: Dockerfile-shop-v2
+      # target: development
+      context: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api-v2
+    container_name: shop-v2
+    environment:
+      NODE_ENV: production
+    restart: unless-stopped
+
+volumes:
+  pgdata:
