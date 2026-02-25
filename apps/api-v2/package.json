@@ -2,6 +2,17 @@
   "name": "@org/api-v2",
   "version": "0.0.1",
   "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "typeorm": "node ./node_modules/typeorm/cli.js -d ./dist/typeorm.config.js",
+    "typeorm:dev": "node ./node_modules/typeorm/cli.js -d ./typeorm.config.js",
+    "migration:run": "pnpm typeorm:dev migration:run",
+    "migration:generate": "node ./scripts/migration-generate.js",
+    "migration:create": "node ./scripts/migration-create.js",
+    "migration:revert": "pnpm typeorm migration:revert",
+    "migration:revert:dev": "pnpm typeorm:dev migration:revert",
+    "schema:drop": "pnpm typeorm schema:drop"
+  },
   "nx": {
     "projectType": "application",
     "targets": {
@@ -91,18 +102,23 @@
   "dependencies": {
     "@anatine/zod-nestjs": "^2.0.12",
     "@nestjs/common": "^11.0.0",
+    "@nestjs/config": "^4.0.3",
     "@nestjs/core": "^11.0.0",
     "@nestjs/platform-express": "^11.0.0",
+    "@nestjs/typeorm": "^11.0.0",
     "@org/api-products": "workspace:*",
     "@org/models": "workspace:*",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.3",
+    "dotenv": "^17.3.1",
     "morgan": "^1.10.1",
     "nest-winston": "^1.10.2",
+    "pg": "^8.18.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0",
     "tslib": "^2.3.0",
     "typeorm": "^0.3.28",
+    "webpack-filter-warnings-plugin": "^1.2.1",
     "winston": "^3.19.0",
     "zod": "^3.20.0"
   },

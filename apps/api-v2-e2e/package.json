@@ -4,7 +4,7 @@
   "private": true,
   "nx": {
     "implicitDependencies": [
-      "api-v2"
+      "@org/api-v2"
     ],
     "targets": {
       "e2e": {
