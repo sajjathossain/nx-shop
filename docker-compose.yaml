@@ -31,6 +31,8 @@ services:
       dockerfile: Dockerfile-shop-v2
       # target: development
       context: .
+      args:
+        NEXT_PUBLIC_API_URL: http://api-v2:4000
     ports:
       - "3000:3000"
     depends_on:
