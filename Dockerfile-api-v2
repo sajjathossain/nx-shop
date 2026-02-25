@@ -10,7 +10,7 @@ RUN pnpm install
 
 COPY . .
 
-RUN pnpm nx build api-v2 --configuration=production
+RUN pnpm nx build @org/api-v2 --configuration=production
 
 FROM node:20-alpine AS runner
 WORKDIR /app

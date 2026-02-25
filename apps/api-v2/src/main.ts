@@ -6,15 +6,15 @@
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
-import { WINSTON_MODULE_NEST_PROVIDER, utilities as nestWinstonModuleUtilities } from 'nest-winston';
-import * as winston from 'winston';
-import morgan from 'morgan';
+// import { WINSTON_MODULE_NEST_PROVIDER, utilities as nestWinstonModuleUtilities } from 'nest-winston';
+/* import * as winston from 'winston';
+import morgan from 'morgan'; */
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: true,
   });
-  const logger = winston.createLogger({
+  /* const logger = winston.createLogger({
     transports: [
       new winston.transports.File({ filename: 'error.log', level: 'error' }),
       new winston.transports.File({ filename: 'combined.log' }),
@@ -30,18 +30,18 @@ async function bootstrap() {
       })
     ]
   })
-  const morganStream = { write: (message: string) => logger.info(message.trim()) };
+  const morganStream = { write: (message: string) => logger.info(message.trim()) }; */
 
   const globalPrefix = 'api';
-  app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
+  // app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
   app.setGlobalPrefix(globalPrefix);
   app.enableCors({
     origin: "*"
   })
 
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  morgan.token('real-ip', (req: any) => {
+
+  /* morgan.token('real-ip', (req: any) => {
     const cfIp = req.headers['cf-connecting-ip'];
     const xRealIp = req.headers['x-real-ip'];
     const xForwardedFor = req.headers['x-forwarded-for'];
@@ -55,10 +55,10 @@ async function bootstrap() {
       return forwarded.split(',')[0].trim();
     }
     return req.connection.remoteAddress;
-  });
+  }); */
 
   // app.use(morgan(':real-ip - :method :url :status :res[content-length] - :response-time ms :referrer :user-agent'));
-  app.use(morgan('combined', { stream: morganStream }));
+  // app.use(morgan('combined', { stream: morganStream }));
 
   const port = process.env.PORT || 4000;
   await app.listen(port, "0.0.0.0");

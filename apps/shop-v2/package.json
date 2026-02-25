@@ -15,7 +15,7 @@
   "nx": {
     "projectType": "application",
     "tags": [
-      "scope:shop-v2"
+      "scope:shop-v2-app"
     ],
     "targets": {
       "serve": {
@@ -24,7 +24,7 @@
           "@org/api-v2:serve"
         ],
         "options": {
-          "buildTarget": "@org/shop-v2:build",
+          "buildTarget": "shop-v2:build",
           "port": 3000,
           "dev": true
         }

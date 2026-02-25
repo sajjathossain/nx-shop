@@ -6,8 +6,8 @@ export const EnvSchema = z.object({
   DB_USERNAME: z.string(),
   DB_PASSWORD: z.string(),
   DB_DATABASE: z.string(),
-  DB_SYNCHRONIZE: z.boolean(),
-}).strict()
+  DB_SYNCHRONIZE: z.coerce.boolean(),
+})
 
 export type TEnv = z.infer<typeof EnvSchema>
 

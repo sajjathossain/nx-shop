@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { ApiResponse, PaginatedResponse, Product, ProductFilter } from '@org/models';
 import { ProductsQueryDTO } from './dto/product.dto';
@@ -6,6 +6,8 @@ import { ProductsService as ProductsRepository } from '@org/api-products';
 
 @Injectable()
 export class ProductsService {
+  private readonly logger = new Logger(ProductsService.name);
+
   constructor(private readonly productsRepository: ProductsRepository) { }
   create(createProductDto: CreateProductDto) {
     return 'This action adds a new product';
@@ -35,11 +37,14 @@ export class ProductsService {
       const pageSize = query.pageSize ? Number(query.pageSize) : 10;
 
       const result = this.productsRepository.getProducts(filter, page, pageSize);
+      console.dir({ result }, { depth: null });
+      this.logger.log(`Products found: ${result.items.length}`);
 
       const response: ApiResponse<PaginatedResponse<Product>> = {
         data: result,
         success: true,
       };
+
 
       return response
     } catch {

@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Product, ApiResponse } from '@org/models';
+import axios from 'axios';
 
-const API_URL = 'http://localhost:4000/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://api-v2:4000/api';
 
 export function useProduct(id: string | undefined) {
   const [product, setProduct] = useState<Product | null>(null);
@@ -19,8 +20,8 @@ export function useProduct(id: string | undefined) {
       setError(null);
 
       try {
-        const response = await fetch(`${API_URL}/products/${id}`);
-        const data: ApiResponse<Product> = await response.json() as ApiResponse<Product>;
+        const response = await axios.get<ApiResponse<Product>>(`${API_URL}/products/${id}`);
+        const data = response.data;
 
         if (!data.success) {
           throw new Error(data.error || 'Failed to load product');

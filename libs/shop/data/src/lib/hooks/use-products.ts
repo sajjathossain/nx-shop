@@ -1,7 +1,9 @@
+'use client'
 import { useState, useEffect } from 'react';
 import { Product, ApiResponse, PaginatedResponse, ProductFilter } from '@org/models';
+import axios from 'axios';
 
-const API_URL = 'http://localhost:4000/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://api-v2:4000/api';
 
 export function useProducts(
   filter?: ProductFilter,
@@ -33,8 +35,9 @@ export function useProducts(
           if (filter.searchTerm) params.append('searchTerm', filter.searchTerm);
         }
 
-        const response = await fetch(`${API_URL}/products?${params}`);
-        const data: ApiResponse<PaginatedResponse<Product>> = await response.json() as ApiResponse<PaginatedResponse<Product>>;
+
+        const response = await axios.get<ApiResponse<PaginatedResponse<Product>>>(`${API_URL}/products?${params}`);
+        const data = response.data;
 
         if (!data.success) {
           throw new Error(data.error || 'Failed to load products');

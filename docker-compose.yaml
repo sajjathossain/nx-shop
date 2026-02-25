@@ -24,6 +24,12 @@ services:
       - db
     environment:
       NODE_ENV: production
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      DB_DATABASE: nx-shop
+      DB_SYNCHRONIZE: true
     restart: unless-stopped
 
   shop-v2:
@@ -32,7 +38,7 @@ services:
       # target: development
       context: .
       args:
-        NEXT_PUBLIC_API_URL: http://api-v2:4000
+        NEXT_PUBLIC_API_URL: http://api-v2:4000/api
     ports:
       - "3000:3000"
     depends_on:
