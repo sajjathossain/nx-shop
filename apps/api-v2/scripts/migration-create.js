@@ -15,7 +15,7 @@ if (!migrationName) {
 }
 
 // Build the TypeORM migration generate command
-const command = `node ./node_modules/typeorm/cli.js migration:create ./src/app/migrations/${migrationName}`;
+const command = `pnpm typeorm:without-config migration:create ./src/app/migrations/${migrationName}`;
 
 // Log the command for visibility
 console.log(`Running: ${command}`);

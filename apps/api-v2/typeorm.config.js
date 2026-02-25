@@ -11,7 +11,7 @@ module.exports = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
     synchronize: Boolean(process.env.DB_SYNCHRONIZE),
-    migrations: [__dirname + '/src/app/migrations/*.js'],
+    migrations: [__dirname + '/src/app/migrations/*.{ts,js}'],
     entities: [__dirname + '/src/app/**/*.entity.{ts,js}'],
     subscribers: [__dirname + '/src/app/**/*.subscriber.{ts,js}'],
     logging: false,

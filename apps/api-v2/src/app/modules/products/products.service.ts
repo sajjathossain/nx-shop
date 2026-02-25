@@ -1,47 +1,66 @@
 import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
-import { ApiResponse, PaginatedResponse, Product, ProductFilter } from '@org/models';
+import { ApiResponse, PaginatedResponse, Product } from '@org/models';
 import { ProductsQueryDTO } from './dto/product.dto';
-import { ProductsService as ProductsRepository } from '@org/api-products';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ProductEntity } from './entities/product.entity';
+import { Between, FindOptionsWhere, ILike, Repository } from 'typeorm';
 
 @Injectable()
 export class ProductsService {
   private readonly logger = new Logger(ProductsService.name);
 
-  constructor(private readonly productsRepository: ProductsRepository) { }
-  create(createProductDto: CreateProductDto) {
+  constructor(
+    @InjectRepository(ProductEntity)
+    private readonly productsRepository: Repository<ProductEntity>,
+  ) { }
+
+  create(_createProductDto: CreateProductDto) {
     return 'This action adds a new product';
   }
 
-  findAll(query: ProductsQueryDTO) {
+  async findAll(query: ProductsQueryDTO) {
     try {
-      const filter: ProductFilter = {};
+      const filter: FindOptionsWhere<ProductEntity> = {};
 
       if (query.category) {
-        filter.category = query.category as string;
+        filter.category = query.category;
       }
-      if (query.minPrice) {
-        filter.minPrice = Number(query.minPrice);
+      if (query.minPrice || query.maxPrice) {
+        const minPrice = Number(query.minPrice) || 0;
+        const maxPrice = Number(query.maxPrice) || Number.MAX_SAFE_INTEGER;
+        filter.price = Between(minPrice, maxPrice)
       }
-      if (query.maxPrice) {
-        filter.maxPrice = Number(query.maxPrice);
-      }
-      if (query.inStock !== undefined) {
+
+      if (query.inStock) {
         filter.inStock = query.inStock;
       }
+
       if (query.searchTerm) {
-        filter.searchTerm = query.searchTerm as string;
+        filter.name = ILike(`%${query.searchTerm}%`);
+        filter.description = ILike(`%${query.searchTerm}%`);
+        filter.category = ILike(`%${query.searchTerm}%`);
       }
 
       const page = query.page ? Number(query.page) : 1;
       const pageSize = query.pageSize ? Number(query.pageSize) : 10;
+      const skip = (page - 1) * pageSize;
 
-      const result = this.productsRepository.getProducts(filter, page, pageSize);
-      console.dir({ result }, { depth: null });
-      this.logger.log(`Products found: ${result.items.length}`);
+      const [result, total] = await this.productsRepository.findAndCount({
+        where: filter,
+        skip,
+        take: pageSize,
+      })
+      this.logger.log(`Products found: ${total}`);
 
       const response: ApiResponse<PaginatedResponse<Product>> = {
-        data: result,
+        data: {
+          items: result,
+          total,
+          page,
+          pageSize,
+          totalPages: Math.ceil(total / pageSize),
+        },
         success: true,
       };
 
@@ -57,9 +76,9 @@ export class ProductsService {
     }
   }
 
-  findOne(id: string) {
+  async findOne(id: string) {
     try {
-      const product = this.productsRepository.getProductById(id);
+      const product = await this.productsRepository.findOne({ where: { id } })
 
       if (!product) {
         const response: ApiResponse<unknown> = {
@@ -93,11 +112,11 @@ export class ProductsService {
     return `This action removes a #${id} product`;
   }
 
-  getCategories() {
+  async getCategories() {
     try {
-      const categories = this.productsRepository.getCategories();
+      const categories = await this.productsRepository.query<{ category: string }[]>(`SELECT DISTINCT category FROM product`);
       const response: ApiResponse<string[]> = {
-        data: categories,
+        data: categories.map(category => category.category),
         success: true,
       };
       return response

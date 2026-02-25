@@ -6,6 +6,8 @@
     "types": [
       "node"
     ],
+    "strict": true,
+    "strictPropertyInitialization": false,
     "rootDir": ".",
     "moduleResolution": "nodenext",
     "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo",

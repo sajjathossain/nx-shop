@@ -4,9 +4,10 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
-    "typeorm": "node ./node_modules/typeorm/cli.js -d ./dist/typeorm.config.js",
-    "typeorm:dev": "node ./node_modules/typeorm/cli.js -d ./typeorm.config.js",
-    "migration:run": "pnpm typeorm:dev migration:run",
+    "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js -d ./typeorm.config.js",
+    "typeorm:without-config": "node ./node_modules/typeorm/cli.js",
+    "typeorm:dev": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d ./typeorm.config.js",
+    "migration:run": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d ./typeorm.config.js",
     "migration:generate": "node ./scripts/migration-generate.js",
     "migration:create": "node ./scripts/migration-create.js",
     "migration:revert": "pnpm typeorm migration:revert",
@@ -104,6 +105,7 @@
     "@nestjs/common": "^11.0.0",
     "@nestjs/core": "^11.0.0",
     "@nestjs/platform-express": "^11.0.0",
+    "@nestjs/typeorm": "^11.0.0",
     "@org/api-products": "workspace:*",
     "@org/models": "workspace:*",
     "class-transformer": "^0.5.1",
@@ -111,9 +113,11 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0",
     "tslib": "^2.3.0",
+    "typeorm": "^0.3.28",
     "zod": "^3.20.0"
   },
   "devDependencies": {
-    "@nestjs/testing": "^11.0.0"
+    "@nestjs/testing": "^11.0.0",
+    "ts-node": "10.9.1"
   }
 }

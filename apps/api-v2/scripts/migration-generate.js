@@ -15,7 +15,7 @@ if (!migrationName) {
 }
 
 // Build the TypeORM migration generate command
-const command = `pnpm typeorm:dev migration:generate ./src/app/migrations/${migrationName}`;
+const command = `pnpm typeorm migration:generate ./src/app/migrations/${migrationName}`;
 
 // Log the command for visibility
 console.log(`Running: ${command}`);

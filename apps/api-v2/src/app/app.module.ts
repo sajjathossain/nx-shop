@@ -6,6 +6,7 @@ import { APP_FILTER, BaseExceptionFilter } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EnvSchema, TEnv } from './config/env.schema';
+import { ProductEntity } from './modules/products/entities/product.entity';
 
 
 @Module({
@@ -33,7 +34,7 @@ import { EnvSchema, TEnv } from './config/env.schema';
           username: config.get('DB_USERNAME'),
           password: config.get('DB_PASSWORD'),
           database: config.get('DB_DATABASE'),
-          entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+          entities: [ProductEntity],
           subscribers: [__dirname + '/../**/*.subscriber{.ts,.js}'],
           synchronize: config.get('DB_SYNCHRONIZE'),
         };
