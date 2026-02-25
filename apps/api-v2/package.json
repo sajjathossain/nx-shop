@@ -1,5 +1,5 @@
 {
-  "name": "api-v2",
+  "name": "@org/api-v2",
   "version": "0.0.1",
   "private": true,
   "nx": {
@@ -97,12 +97,17 @@
     "@org/models": "workspace:*",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.3",
+    "morgan": "^1.10.1",
+    "nest-winston": "^1.10.2",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0",
     "tslib": "^2.3.0",
+    "typeorm": "^0.3.28",
+    "winston": "^3.19.0",
     "zod": "^3.20.0"
   },
   "devDependencies": {
-    "@nestjs/testing": "^11.0.0"
+    "@nestjs/testing": "^11.0.0",
+    "@types/morgan": "^1.9.10"
   }
 }
