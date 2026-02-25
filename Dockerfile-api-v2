@@ -25,4 +25,5 @@ COPY --from=builder /app/apps/api-v2/dist ./dist
 
 EXPOSE 4000
 
+RUN pnpm nx @org/api-v2:migration:run
 CMD ["node", "dist/main.js"]
