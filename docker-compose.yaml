@@ -38,7 +38,7 @@ services:
       # target: development
       context: .
       args:
-        NEXT_PUBLIC_API_URL: http://api-v2:4000/api
+        NEXT_PUBLIC_API_URL: http://localhost:4000/api
     ports:
       - "3000:3000"
     depends_on:
