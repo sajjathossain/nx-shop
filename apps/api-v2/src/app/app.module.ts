@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EnvSchema, TEnv } from './config/env.schema';
 import { ProductEntity } from './modules/products/entities/product.entity';
+import { CategoryModule } from './modules/category/category.module';
 
 
 @Module({
@@ -41,7 +42,8 @@ import { ProductEntity } from './modules/products/entities/product.entity';
       },
       inject: [ConfigService],
     }),
-    ProductsModule],
+    ProductsModule,
+    CategoryModule],
   controllers: [AppController],
   providers: [AppService, {
     provide: APP_FILTER,
