@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { ProductEntity } from "../../products/entities/product.entity";
 
 @Entity({ name: "category" })
 export class CategoryEntity {
@@ -23,4 +24,8 @@ export class CategoryEntity {
 
   @OneToMany((type) => CategoryEntity, (category) => category.parent)
   children: CategoryEntity[]
+
+  @ManyToMany(() => ProductEntity, product => product.categories)
+  @JoinTable()
+  products: ProductEntity[]
 }

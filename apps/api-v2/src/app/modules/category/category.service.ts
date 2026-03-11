@@ -24,16 +24,32 @@ export class CategoryService {
     }
   }
 
-  findAll(query: FindQueryQueryDTO) {
+  async findAll(query: FindQueryQueryDTO) {
     const { parentId, title } = query
-    return this.categoryRepository.find({
+    const categories = await this.categoryRepository.find({
       where: {
+        ...(!!parentId && ({
+          parent: {
+            id: parentId
+          },
+        })),
+        ...(!!title?.length && ({
+          title: ILike(`%${title}%`)
+        }))
+      },
+      relations: {
+        parent: true
+      },
+      select: {
+        id: true,
+        title: true,
         parent: {
-          id: parentId
-        },
-        title: ILike(`%${title}%`)
+          id: true,
+          title: true
+        }
       }
     })
+    return categories
   }
 
   findOne(id: string) {
