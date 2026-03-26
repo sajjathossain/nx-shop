@@ -3,10 +3,7 @@ WORKDIR /app
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm config set fetch-retries 5 \
-    && pnpm config set fetch-timeout 600000 \
-    && pnpm config set network-concurrency 4
-RUN pnpm install
+RUN pnpm install --frozen-lockfile
 
 COPY . .
 
@@ -17,13 +14,26 @@ WORKDIR /app
 
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
+# Only copy what's needed for production
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml tsconfig.base.json ./
+# Copy all workspace package.jsons to maintain monorepo structure
+COPY apps/api-v2/package.json ./apps/api-v2/
+COPY libs/api/products/package.json ./libs/api/products/
+COPY libs/shared/models/package.json ./libs/shared/models/
 
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
+# Install only production dependencies
+RUN pnpm install --prod --frozen-lockfile
 
-COPY --from=builder /app/apps/api-v2/dist ./dist
+# Copy the built application and necessary config files for migrations
+# Maintain structure so relative tsconfig paths work
+COPY --from=builder /app/apps/api-v2/dist ./apps/api-v2/dist
+COPY --from=builder /app/apps/api-v2/typeorm.config.ts ./apps/api-v2/
+COPY --from=builder /app/apps/api-v2/tsconfig.app.json ./apps/api-v2/
+COPY --from=builder /app/apps/api-v2/src/app/migrations ./apps/api-v2/src/app/migrations
+COPY --from=builder /app/apps/api-v2/scripts ./apps/api-v2/scripts
 
+# Expose port 4000
 EXPOSE 4000
 
-RUN pnpm nx @org/api-v2:migration:run
-CMD ["node", "dist/main.js"]
+# Run migrations and then start the server from the app directory
+CMD ["sh", "-c", "cd apps/api-v2 && node ./scripts/migration-run.js && node dist/main.js"]

@@ -1,9 +1,5 @@
-import { useState } from "react"
 
 export const ActionCard = () => {
-  const [isActive, setIsActive] = useState(false)
-  const [isDone, setIsDone] = useState(false)
-
   return <div className="w-full bg-white rounded-lg shadow-md grid place-items-center p-4">
     <button className="relative grid place-items-center">
       <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500" className="w-48 aspect-square rounded-full grayscale" alt="product" />

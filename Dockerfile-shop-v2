@@ -70,6 +70,9 @@ COPY --from=builder /app/dist/apps/shop-v2/.next/standalone ./standalone
 COPY --from=builder /app/dist/apps/shop-v2/.next/static     ./standalone/.next/static
 COPY --from=builder /app/dist/apps/shop-v2/public           ./standalone/public
 
+# Also copy assets to the app-specific folder just in case
+COPY --from=builder /app/dist/apps/shop-v2/.next/static     ./standalone/apps/shop-v2/.next/static
+COPY --from=builder /app/dist/apps/shop-v2/public           ./standalone/apps/shop-v2/public
 
 # Switch to non-root user for security best practices
 USER node
@@ -78,4 +81,5 @@ USER node
 EXPOSE 3000
 
 # Start Next.js standalone server
-CMD ["node", "standalone/apps/shop-v2/server.js"]
+WORKDIR /app/standalone
+CMD ["node", "apps/shop-v2/server.js"]
